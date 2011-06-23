@@ -1,0 +1,283 @@
+<html>
+<header>
+
+<%= stylesheet_link_tag "galtable/gltm" %>
+<%= stylesheet_link_tag "ad_galerie/jquery.ad-gallery" %>
+
+<%= javascript_include_tag "jquery" %>
+<%= javascript_include_tag "ad_galerie/jquery.ad-gallery" %>
+
+<script type="text/javascript">
+var $j = jQuery.noConflict();
+
+  $j(function() {
+    var galleries = $j('.ad-gallery').adGallery();
+    galleries[0].settings.description_wrapper = $j('#descriptions');
+;
+
+    $j('#switch-effect').change(
+      function() {
+        galleries[0].settings.effect = $j(this).val();
+        return false;
+      }
+    );
+    $j('#toggle-slideshow').click(
+      function() {
+        galleries[0].slideshow.toggle();
+        return false;
+      }
+    );
+    $j('#toggle-description').click(
+      function() {
+        if(!galleries[0].settings.description_wrapper) {
+          galleries[0].settings.description_wrapper = $j('#descriptions');
+        } else {
+          galleries[0].settings.description_wrapper = false;
+        }
+        return false;
+      }
+    );
+  });
+  </script>
+
+<style type="text/css">
+  select, input, textarea {
+    font-size: 1em;
+  }
+
+  h1 {
+    font-family:Cooper Black;
+    font-style:Normal;
+    font-size:40px;
+    color:#210B61;
+    margin-top: 20px;
+    margin-bottom: 0;
+    text-align:center;
+    padding: 0;
+    border-bottom: 1px dotted #dedede;
+  }
+
+  h2 {
+    font-family:Arial;
+    font-style:Normal;
+    font-size:18px;
+    color:#210B61;
+    padding:20px
+    margin-left: 20px;
+    text-align:center;
+  }
+  h3 {
+    margin-top: 1.2em;
+    margin-bottom: 0;
+    padding: 0;
+  }
+  .example {
+    border: 1px solid #CCC;
+    background: #f2f2f2;
+    padding: 10px;
+  }
+  ul {
+    list-style-image:url(list-style.gif);
+  }
+  pre {
+    font-family: "Lucida Console", "Courier New", Verdana;
+    border: 1px solid #CCC;
+    background: #f2f2f2;
+    padding: 10px;
+  }
+  code {
+    font-family: "Lucida Console", "Courier New", Verdana;
+    margin: 0;
+    padding: 0;
+  }
+
+  #gallery {
+    padding: 30px;
+    background: #e1eef5;
+  }
+  #descriptions {
+    position: relative;
+    height: 50px;
+    background: #EEE;
+    margin-top: 10px;
+    width: 640px;
+    padding: 10px;
+    overflow: hidden;
+  }
+    #descriptions .ad-image-description {
+      position: absolute;
+    }
+    #descriptions .ad-image-description .ad-description-title {
+      display: block;
+    }
+#block5 {
+	background-image: url(/images/gradient13119275.png);
+	background-repeat: repeat-x;
+	background-position: left top;
+	border:3px solid #D95B43;
+	color:#ee8;
+	font-family:Arial Black,Georgia,"Times New Roman",Times,serif;
+	margin:2px 0px;
+	padding:20px;
+}
+
+#block5 .date_block {
+	border-left:1px solid #D95B43;
+	display:block;
+	float:right;
+	font-style:italic;
+	height:50px;
+	margin:0 10px;
+	padding:10px 2px;
+	width:90px;
+}
+#links {
+	background:transparent url(images/comments.png) no-repeat scroll 0 5px;
+	font-size:14px;
+	padding:2px 0 0 2px;
+	text-align:right;
+}
+
+#block5 .day {
+	font-size:22px;
+	font-weight:bold;
+	padding:0 0 20px;
+	text-align:center;
+}
+#block5 .comments {
+	background:transparent url(images/comments.png) no-repeat scroll 0 5px;
+	font-weight:normal;
+	font-size:16px;
+	padding:2px 0 0 10px;
+	text-align:center;
+}
+#block5 .link_block {
+        font-family:Tahoma;
+	font-size:12px;
+	font-weight:normal;
+        word-spacing:20px;
+        margin-bottom:-18px;
+	text-align:right;
+}
+
+#block5 .link_block a{
+	font-size:12px;
+	font-weight:normal;
+        color:#D95B43;
+        text-decoration:none;
+}
+#block5 .link_block a:hover{
+	font-size:12px;
+	font-weight:bold;
+        background:#468E76;
+        text-decoration:none;
+}
+#block5 h2{
+	border-bottom:1px solid #D95B43;
+	font-size:24px;
+	font-weight:bold;
+	letter-spacing:-1px;
+	line-height:26px;
+}
+#block5 h2 a {
+	border:medium none;
+	color:#468E76;
+	text-decoration:none;
+}
+#block5 .author a {
+	color:#D95B43;
+	font-weight:bold;
+	text-decoration:none;
+}
+#block5 .author p {
+	color:#D95B43;
+	font-size:12px;
+	font-weight:bold;
+	text-decoration:none;
+}
+ </style>
+
+  <title>Kurshalter Bildgalerie aktuelle Ausgabe (ltm: last 12 month)</title>
+
+</header>
+
+<body>
+<div id='content'> 
+
+    <div id="block5">  
+        <div class="date_block">  
+            <div class="day"><%= [params[:heute]]%></div>  
+            <div class="comments"><%= @pictures.count%> Bilder</div>  
+        </div>  
+        <div style="padding: 10px;">  
+            <h2>KURSHALTER  -  Galerie</h2>  
+            <span class="author"><p>Aktuelle Bildgalerie vom <%= @galeries.minimum("date_galerie").strftime('%d.%m.%Y') %> bis <%= @galeries.maximum("date_galerie").strftime('%d.%m.%Y') %>:  <%= Galerie.find(params[:gal_id]).galerie_name %></p></span>  
+        </div>  
+       <div >
+            <div class="link_block"><%= link_to 'Home ', home_path %> <a class="top_link" href="javascript:history.back()" ><span> Zur&uumlck </span></a> <%= link_to 'Kontakt ', support_path %>
+            </div>
+        </div> 
+
+    </div>  
+ 
+
+
+  <div id="nav" > 
+  <% form_tag ( '/galltm', :method => 'post') do %> 
+  <% @galeries.each do |galery| %>
+
+      <p><%= galery.date_galerie.strftime('%d/%m/%Y') %></p>      
+      <p style= "font-size:12px; font-weight:bolder">
+      <%= radio_button_tag( :gal_id, [galery.id]   ) %>
+      <%= galery.galerie_name %></p>
+      <br> 
+ <% end %>
+  
+ <p> <%= submit_tag 'Galerie anzeigen' %> </p>
+
+ <% end %>
+  </div>
+
+  <div id="contentinner"> 
+   <div id="container">
+    <div id="gallery" class="ad-gallery">
+      <div class="ad-image-wrapper"></div>
+      <div class="ad-controls">     </div>
+      <div class="ad-nav">
+        <div class="ad-thumbs">
+          <ul class="ad-thumb-list">
+
+
+   <% @pictures.each do |bild| %>
+ 
+      <li>
+        <a href="/images/galerie/<%= bild.picpath %>/<%= bild.filename %>">
+                <img src="/images/galerie/<%= bild.picpath %>/thumbnails/<%= bild.filename %>" title="<%= bild.comment %>" alt="<%= bild.description %>" class="<%= "image"+[params[:zz] += 1].to_s %>">
+        </a>
+      </li>
+    
+   <% end %>
+   
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="descriptions">
+
+    </div>
+
+  </div>
+  
+  <br style="clear:both" />
+  <div id="clearfooter"></div>
+  <!-- to clear footer -->
+</div>
+<div id="insertbottom"><div id="hideborderbottom"></div><!-- just rubs out a bit of the bottom border -->
+</div>
+<div id="footer">Footer</div>
+
+       <!-- The JavaScript -->
+
+</body>
+</html>

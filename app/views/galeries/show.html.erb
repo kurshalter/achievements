@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Galerie:</b>
+  <%= @galerie.galerie_name %>
+</p>
+
+<p>
+  <b>Short desc:</b>
+  <%= @galerie.short_desc %>
+</p>
+
+<p>
+  <b>Date galerie:</b>
+  <%= @galerie.date_galerie %>
+</p>
+<p>
+ <b>Image</b>
+ <%= image_tag url_for(:controller => "galeries", :action => "show_avatar", :id => @galerie.id) %>
+</p>
+<%= link_to 'Edit', edit_galery_path(@galerie) %> |
+<%= link_to 'Back', galeries_path %>

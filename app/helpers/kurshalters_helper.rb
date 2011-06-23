@@ -1,0 +1,2 @@
+module KurshaltersHelper
+end

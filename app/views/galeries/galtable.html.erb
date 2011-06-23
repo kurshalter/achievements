@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us">
+<header>
+	<title>jQuery plugin: Tablesorter 2.0 - Pager plugin</title>
+	<link rel="stylesheet" href="../stylesheets/galtable/jq.css" type="text/css" media="print, projection, screen" />
+	<link rel="stylesheet" href="../stylesheets/galtable/themes/blue/style.css" type="text/css" media="print, projection, screen" />
+  <link rel="stylesheet" href="../stylesheets/galtable/pro_dropdown_3.css" type="text/css"  />
+	<script type="text/javascript" src="../javascripts/galtable/jquery-latest.js"></script>
+	<script type="text/javascript" src="../javascripts/galtable/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="../javascripts/galtable/addons/pager/jquery.tablesorter.pager.js"></script>
+  <script type="text/javascript" src="../javascripts/galtable/stuHover.js"></script>
+
+	<script type="text/javascript">
+        var $j = jQuery.noConflict();
+	$j(function() {
+		$j("table")
+			.tablesorter({widthFixed: true, widgets: ['zebra']})
+			.tablesorterPager({container: $j("#pager")});
+	});
+	</script>
+	
+<style>
+#block5 {
+	background:#27453A;
+	border:3px solid #D95B43;
+	color:#ECD078;
+	font-family:Georgia,"Times New Roman",Times,serif;
+	margin:2px 0px;
+	padding:20px;
+}
+
+#block5 .date_block {
+	border-left:1px solid #D95B43;
+	display:block;
+	float:right;
+	font-style:italic;
+	height:50px;
+	margin:0 10px;
+	padding:10px 2px;
+	width:90px;
+}
+#links {
+	background:transparent url(images/comments.png) no-repeat scroll 0 5px;
+	font-size:14px;
+	padding:2px 0 0 2px;
+	text-align:right;
+}
+
+#block5 .day {
+	font-size:22px;
+	font-weight:normal;
+	padding:0 0 20px;
+	text-align:center;
+}
+#block5 .comments {
+	background:transparent url(images/comments.png) no-repeat scroll 0 5px;
+	font-size:11px;
+	padding:2px 0 0 20px;
+	text-align:center;
+}
+
+#block5 h2{
+	border-bottom:1px solid #D95B43;
+	font-size:24px;
+	font-weight:normal;
+	letter-spacing:-1px;
+	line-height:26px;
+}
+#block5 h2 a {
+	border:medium none;
+	color:#468E76;
+	text-decoration:none;
+}
+#block5 .author a {
+	color:#D95B43;
+	font-weight:bold;
+	text-decoration:none;
+}
+</style>
+
+<title>Kurshalter Bildgalerie Archiv</title>
+</header>
+
+<body >
+
+<ul id="nav">
+	<li class="top"><a class="top_link" href="http://www.kurshalter.de"><span>Home</span></a></li>
+	<li class="top"><a class="top_link" href="javascript:history.back()" ><span>Zur&uumlck</span></a></li>
+        <li class="top"><a class="top_link" href="/support"><span>Kontakt</span></a></li>  
+</ul>
+
+    <div id="block5">  
+        <div class="date_block">  
+            <div class="day"><%= [params[:heute]]%></div>  
+            <div class="comments"><%= @galeries.count%> Galerien</div>  
+        </div>  
+        <div style="padding: 10px;">  
+            <h2><a>Kurshalter.de  Bildgalerie - Archiv</a></h2>  
+            <span class="author">Auswahl im Gesamtbestand der Bildgalerien, eingestellt von kurshalter.de <a href="/support"> Kontakt</a></span>  
+        </div>  
+    </div>  
+    
+<div id="main">
+
+<h1>Bildgalerie Archiv - Auswahlliste aller vorhandenen Galerien</h1>
+
+<table cellspacing="1" class="tablesorter">
+ <thead>
+  <tr>
+    <th>Galerie</th>
+    <th>Short desc</th>
+    <th>Date galerie</th>
+  </tr>
+ </thead>
+<tfoot>
+   <tr>
+     <th>Galerie</th>
+     <th>Short desc</th>
+     <th>Date galerie</th>
+   </tr>
+</tfoot>
+<tbody>
+
+<% @galeries.each do |galery| %>
+  <tr>
+  <% form_tag ( '/galltm', :method => 'post'  ) do %> 
+    <td><%= galery.galerie_name %></td>
+    <td><%= galery.short_desc %></td>
+    <td><%= galery.date_galerie.strftime('%d.%m.%Y') %></td>
+    <td><%= hidden_field_tag( :gal_id , [galery.id]  ) %></td>
+    <td><%= image_submit_tag '../images/kurshalter/iconfoto.png' %>Show</td>
+   <% end %>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+<div id="pager" class="pager">
+	<form>
+		<img src="../javascripts/galtable/addons/pager/icons/first.png" class="first"/>
+		<img src="../javascripts/galtable/addons/pager/icons/prev.png" class="prev"/>
+		<input type="text" class="pagedisplay"/>
+		<img src="../javascripts/galtable/addons/pager/icons/next.png" class="next"/>
+		<img src="../javascripts/galtable/addons/pager/icons/last.png" class="last"/>
+		<select class="pagesize">
+			<option selected="selected"  value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+		</select>
+	</form>
+</div>
+
+</div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+<script type="text/javascript">
+_uacct = "UA-2189649-2";
+urchinTracker();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,2 @@
+class KurshaltersController < ApplicationController
+end

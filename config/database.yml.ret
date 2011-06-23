@@ -1,0 +1,26 @@
+
+
+development: &db
+  adapter: mysql
+  encoding: utf8
+  database: db_95271634n1
+  username: user95271634n1
+  password: lvPdAMkt
+  host:     zeta.railshoster.de
+
+test:
+  adapter: sqlite3
+  database: db/achievement.sqlite3
+  pool: 5
+  timeout: 5000
+  
+production:
+  <<: *db
+  
+  database: db_95271634n2
+  username: user95271634n2
+  password: VXgyKXfQ
+  host:     zeta.railshoster.de
+  
+
+

@@ -1,0 +1,104 @@
+require 'date'
+require 'rubygems'
+require 'exifr'
+require 'RMagick'
+require 'sqlite3'
+require 'active_record'
+
+#ActiveRecord::Base.logger = Logger.new(STDERR)
+#ActiveRecord::Base.colorize_logging = false
+
+ActiveRecord::Base.establish_connection(
+    :adapter => "sqlite3",
+    :database => "X:/achievements/db/achievement.sqlite3",
+    :dbfile  => "X:/achievements/db/achievement.sqlite3"
+)
+
+class Picture < ActiveRecord::Base
+    has_many :bilder
+end
+
+class Galerie < ActiveRecord::Base
+end
+
+puts "START ....."
+
+main_path = "x:/bilder/"
+web_path  = "x:/achievements/public/images/galerie/"
+act_path  = ARGV.first
+
+
+bilddir   = main_path + act_path 
+#dateiname = bilddir + "/" + "Pic_Liste.csv"
+dateiname = "Pic_Liste.csv"
+
+Dir.chdir(bilddir)
+
+datei = File.open( dateiname, "r" )
+
+datei.each_line do | zeile |
+   pname, ppfad, pcomment, pgalerie, pcountry, pdescription = zeile.chomp.split(/\s*\;\s*/)
+   image_file = ppfad 
+   dirname   = File.dirname(ppfad)
+   exif_info = nil
+   image_file.downcase
+   exif_info = EXIFR::JPEG.new(image_file)
+   mag_info  = Magick::Image.read(image_file).first
+   mag_info['comment'] = pcomment
+
+#   puts mag_info.get_exif_by_entry('DateTime')[0][1]
+   mydate = mag_info.get_exif_by_entry('DateTime')[0][1]
+   mydate_obj = Date::strptime(mydate, '%Y:%m:%d %H:%M:%S')
+#   puts mydate_obj
+   
+   if exif_info.width > exif_info.height
+     h = 100
+     w = (exif_info.width * 100)/exif_info.height
+   elsif exif_info.width < exif_info.height
+     w = 100
+     h = (exif_info.width * 100)/exif_info.height
+   else
+     w = 100
+     h = 100
+   end
+
+#puts w.to_s + " x " + h.to_s
+
+picpath_db = dirname.gsub(main_path,'')
+webpath_pic	= web_path + picpath_db + "/" + pname
+webpath_thumb   = web_path + act_path + "/" + "thumbnails" + "/" + pname
+
+   thumb = mag_info.resize(w,h)
+
+   gal = Galerie.find_by_galerie(pgalerie)
+   
+   if gal.nil? 
+     Galerie.create(:galerie => pgalerie)
+     gal = Galerie.find_by_galerie(pgalerie)
+   end
+
+   puts gal.galerie
+
+   Picture.create(:filename => pname , 
+                  :picpath  => picpath_db ,
+                  :height   => exif_info.height, 
+                  :width    => exif_info.width,
+                  :model    => exif_info.model,
+                  :comment  => pcomment,
+                  :galerie  => pgalerie,
+                  :galerie_id  => gal.id,
+                  :country  => pcountry,
+                  :description => pdescription,
+                  :date_orig => mydate_obj,
+                  :date_galerie => mydate_obj,
+                  :picthumb => thumb.to_blob)
+
+   mag_info.write(webpath_pic)
+   thumb.write(webpath_thumb)
+
+
+end
+datei.close
+
+
+puts "Ende der Verarbeitung"

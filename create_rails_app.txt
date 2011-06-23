@@ -1,0 +1,19 @@
+1.
+rails new archievements              -- erzeugt struktur mit name archievements
+
+2. 
+rake db:create		-- erzeugt sqlite3 db die in database.yml definiert ist
+
+
+3. 
+rails generate scaffold Pictures filename:string  -- tabelle Pictures editieren, weitere Felder ...
+
+4.
+rake db:migrate
+
+
+CREATE TRIGGER "postinspic" AFTER INSERT ON pictures FOR EACH ROW  BEGIN  insert or ignore into galeries(galerie,date_galerie,picthumb) values (NEW.galerie, NEW.date_galerie, NEW.picthumb);
+
+
+rails generate scaffold Galerie galerie:string short_desc:string date_galerie:datetime picthumb:binary
+
